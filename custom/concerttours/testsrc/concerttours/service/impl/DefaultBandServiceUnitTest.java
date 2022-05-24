@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.hybris.bootstrap.annotations.UnitTest;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -87,11 +88,11 @@ public class DefaultBandServiceUnitTest
 		assertEquals("And should equals what the mock returned", bandModel, result.get(0));
 	}
 
-	@Test
+	@Test(expected = UnknownIdentifierException.class)
 	public void testGetBand()
 	{
 		// Tell Mockito we expect a call to the DAO's getBand(), and, if it occurs, Mockito should return BandModel instance
-		when(bandDAO.findBandsByCode(BAND_CODE)).thenReturn(Collections.singletonList(bandModel));
+		when(bandDAO.findBandsByCode(BAND_CODE)).thenReturn(Collections.EMPTY_LIST);
 		// We make the call to the Service's getBandForCode() which we expect to call the DAO's findBandsByCode()
 		final BandModel result = bandService.getBandForCode(BAND_CODE);
 		// We then verify that the result returned from the Service is the same as that returned from the DAO
