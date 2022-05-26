@@ -59,7 +59,7 @@ public class BandAlbumSalesEventListenerIntegrationTest extends ServicelayerTest
 	}
 
 	@Test
-	public void testEventSending() throws Exception
+	public void testEventSendingAsync() throws Exception
 	{
 		final BandModel band = modelService.create(BandModel.class);
 		band.setCode(BAND_CODE);
@@ -67,6 +67,8 @@ public class BandAlbumSalesEventListenerIntegrationTest extends ServicelayerTest
 		band.setHistory(BAND_HISTORY);
 		band.setAlbumSales(MANY_ALBUMS_SOLD);
 		modelService.save(band);
+		// add sleep here to wait for event processing thread to complete
+		Thread.sleep(2000L);
 		final NewsModel news = findLastNews();
 		Assert.assertTrue("Unexpected news: " + news.getHeadline(), news.getHeadline().contains(BAND_NAME));
 	}
